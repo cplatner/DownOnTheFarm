@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DownOnTheFarmApp {
 
+    public static void main(String[] args) {
+        SpringApplication.run(DownOnTheFarmApp.class, args);
+    }
+
     @GetMapping(value = "/ping", produces = MediaType.TEXT_PLAIN_VALUE)
     public String ping() {
         return "pong";
@@ -21,10 +25,6 @@ public class DownOnTheFarmApp {
     @GetMapping(value = "/health", produces = MediaType.APPLICATION_JSON_VALUE)
     public HealthStatus health() {
         return new HealthStatus(Status.UP);
-    }
-
-    public static void main(String[] args) {
-        SpringApplication.run(DownOnTheFarmApp.class, args);
     }
 
 }

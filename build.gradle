@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.platner'
-version = '0.0.1-SNAPSHOT'
+version = '0.5.0-SNAPSHOT'
 
 java {
 	toolchain {

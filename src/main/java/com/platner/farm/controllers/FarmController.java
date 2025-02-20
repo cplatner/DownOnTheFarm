@@ -32,7 +32,7 @@ public class FarmController {
 
     @Autowired
     private FarmStatusRepository repository;
-    
+
     public FarmController() {
         tokenBucket = Bucket.builder()
                 .addLimit(Bandwidth.classic(2, Refill.greedy(2, Duration.ofMinutes(1))))
@@ -49,7 +49,7 @@ public class FarmController {
     @PostMapping(value = "farm", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<FarmStatus> farm(
             @Parameter(description = "Kind of farm action")
-            @RequestBody @NonNull  FarmAction action) {
+            @RequestBody @NonNull FarmAction action) {
 
         ConsumptionProbe probe = tokenBucket.tryConsumeAndReturnRemaining(1);
         if (probe.isConsumed()) {

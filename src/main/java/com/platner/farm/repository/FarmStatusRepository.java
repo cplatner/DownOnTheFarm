@@ -10,13 +10,20 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 // NB: Not a repository in the Spring sense
 @Component
 public class FarmStatusRepository implements InitializingBean, DisposableBean {
 
     private static final String DBFILE = "down-on-the-farm.db";
+    /** Message for most missing data conditions */
+    private static final String THE_END = "A great dark cloud covers your farm.  This must be the end.";
     private static final String INITSQL = """
             CREATE TABLE Activity (
                 activityId    INTEGER NOT NULL,
@@ -50,11 +57,11 @@ public class FarmStatusRepository implements InitializingBean, DisposableBean {
             INSERT INTO DisasterActivity (disasterId, activityId) VALUES (1, 4); --harvest
             
             INSERT INTO Disaster (disasterId, text) VALUES (2, 'A combine catches fire, burns, and ignites the field too');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (2, 4);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (2, 4); --harvest
             
             INSERT INTO Disaster (disasterId, text) VALUES (3, 'A hailstorm destroys your crops');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (3, 3);
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (3, 4);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (3, 3); --irrigate
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (3, 4); --harvest
             
             INSERT INTO Disaster (disasterId, text) VALUES (4, 'Flooding in the spring delays planting, and the crops never ripen');
             INSERT INTO DisasterActivity (disasterId, activityId) VALUES (4, 1); --plow
@@ -70,11 +77,14 @@ public class FarmStatusRepository implements InitializingBean, DisposableBean {
             
             INSERT INTO Disaster (disasterId, text) VALUES (7, 'A thunderstorm starts fires in the fields, and all of the crops are lost');
             INSERT INTO DisasterActivity (disasterId, activityId) VALUES (7, 4); --harvest
-            """;
-    private static final String DESTROY = """
-            DROP TABLE IF EXISTS Activity;
-            DROP TABLE IF EXISTS Disaster;
-            DROP TABLE IF EXISTS DisasterActivity;
+            
+            INSERT INTO Disaster (disasterId, text) VALUES (8, 'A derecho sweeps through your fields, and destroys all of the crops');
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (8, 3); --irrigate
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (8, 4); --harvest
+            
+            INSERT INTO Disaster (disasterId, text) VALUES (9, 'A late-spring blizzard delays planting, and the crops never ripen');
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (9, 1); --plow
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (9, 2); --plant
             """;
 
     private static final String GETRANDOMSTATUSSQL = """
@@ -103,7 +113,7 @@ public class FarmStatusRepository implements InitializingBean, DisposableBean {
         } catch (SQLException e) {
             LOG.error(e.getMessage(), e);
         }
-        return new FarmStatus(message != null ? message : "A great dark cloud covers your farm", action.getAction());
+        return new FarmStatus(message != null ? message : THE_END, action.getAction());
     }
 
     @Override
