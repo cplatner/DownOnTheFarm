@@ -49,7 +49,10 @@ public class DownOnTheFarmAppTests {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .accept(MediaType.APPLICATION_JSON_VALUE))
                 // The status string is random, so just check for an ok http status for now
-                .andExpect(status().is(400));
+                .andExpect(status().is(400))
+                .andExpect(content().string("JSON parse error: Cannot deserialize value of type " +
+                        "`com.platner.farm.models.Actions` from String \"invalid\": not one of the values " +
+                        "accepted for Enum class: [harvest, plant, plow, irrigate]"));
     }
 
     @Test

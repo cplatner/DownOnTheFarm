@@ -14,6 +14,9 @@ This is the start of that code.  The basic idea is that crops die, animals die,
 and machinery breaks.  However rewarding, farming (and ranching) is also a
 continuous stream of woes.
 
+For a given set of farming activities (planting, plowing, irrigating,
+harvesting), this will produce a random depressing message.
+
 ## Building
 
 1. Clone the repository
@@ -42,6 +45,9 @@ continuous stream of woes.
    curl http://localhost:8080/api/v1/farm --header 'Content-Type: application/json' --data '{ "action": "harvest" }'
 
    ```
+
+   Note that rate limiting is used, and it is set to a small number.  If no
+   values are returned, run curl with -v to see if a 429 status is returned.
 
 3. View the OpenAPI page:
 

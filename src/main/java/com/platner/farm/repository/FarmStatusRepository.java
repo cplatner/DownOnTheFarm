@@ -27,64 +27,64 @@ public class FarmStatusRepository implements InitializingBean, DisposableBean {
     private static final String INITSQL = """
             CREATE TABLE Activity (
                 activityId    INTEGER NOT NULL,
-                name    TEXT NOT NULL,
+                name          TEXT NOT NULL,
                 PRIMARY KEY(activityId AUTOINCREMENT)
             );
-            
+
             CREATE TABLE Disaster (
                 disasterId    INTEGER NOT NULL,
-                text    TEXT NOT NULL,
+                text          TEXT NOT NULL,
                 PRIMARY KEY(disasterId AUTOINCREMENT)
             );
-            
+
             CREATE TABLE DisasterActivity (
                 disasterId    INTEGER NOT NULL,
                 activityId    INTEGER NOT NULL,
-                PRIMARY KEY(disasterId,activityId),
                 FOREIGN KEY(disasterId) REFERENCES Disaster(disasterId),
                 FOREIGN KEY(activityId) REFERENCES Activity(activityId)
             );
-            
+
             INSERT INTO Activity (activityId, name) VALUES (1, 'plow');
             INSERT INTO Activity (activityId, name) VALUES (2, 'plant');
             INSERT INTO Activity (activityId, name) VALUES (3, 'irrigate');
             INSERT INTO Activity (activityId, name) VALUES (4, 'harvest');
-            
+
             INSERT INTO Disaster (disasterId, text) VALUES (1, 'A tornado sweeps through a small town near your farm, and destroys your barn in the process');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (1, 1); --plow
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (1, 2); --plant
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (1, 3); --irrigate
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (1, 4); --harvest
-            
             INSERT INTO Disaster (disasterId, text) VALUES (2, 'A combine catches fire, burns, and ignites the field too');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (2, 4); --harvest
-            
             INSERT INTO Disaster (disasterId, text) VALUES (3, 'A hailstorm destroys your crops');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (3, 3); --irrigate
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (3, 4); --harvest
-            
             INSERT INTO Disaster (disasterId, text) VALUES (4, 'Flooding in the spring delays planting, and the crops never ripen');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (4, 1); --plow
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (4, 2); --plant
-            
             INSERT INTO Disaster (disasterId, text) VALUES (5, 'An early freeze kills all of the crops');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (5, 3); --irrigate
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (5, 4); --harvest
-            
             INSERT INTO Disaster (disasterId, text) VALUES (6, 'A late freeze kills all of the crops');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (6, 2); --plant
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (6, 3); --irrigate
-            
             INSERT INTO Disaster (disasterId, text) VALUES (7, 'A thunderstorm starts fires in the fields, and all of the crops are lost');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (7, 4); --harvest
-            
             INSERT INTO Disaster (disasterId, text) VALUES (8, 'A derecho sweeps through your fields, and destroys all of the crops');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (8, 3); --irrigate
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (8, 4); --harvest
-            
             INSERT INTO Disaster (disasterId, text) VALUES (9, 'A late-spring blizzard delays planting, and the crops never ripen');
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (9, 1); --plow
-            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (9, 2); --plant
+
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (1, 1);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (1, 2);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (1, 3);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (1, 4);
+
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (2, 4);
+
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (3, 3);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (3, 4);
+
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (4, 1);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (4, 2);
+
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (5, 3);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (5, 4);
+
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (6, 2);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (6, 3);
+
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (7, 4);
+
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (8, 3);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (8, 4);
+
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (9, 1);
+            INSERT INTO DisasterActivity (disasterId, activityId) VALUES (9, 2);
             """;
 
     private static final String GETRANDOMSTATUSSQL = """
